@@ -1,14 +1,11 @@
-import './App.css';
-import LeftMenu from './Components/LeftMenu';
-import MainMenu from './Components/MainMenu'
-import RightMenu from './Components/RightMenu'
+import "./App.css";
+import LeftMenu from "./Components/LeftMenu";
+import DetailPage from "./pages/DetailPage";
 function App() {
   return (
     <div className="App">
-     <LeftMenu/>
-      <MainMenu/>
-     {/* <RightMenu/>
-     <div className='background'>hhhhhhhh</div> */} 
+      <LeftMenu />
+      <DetailPage />
     </div>
   );
 }
