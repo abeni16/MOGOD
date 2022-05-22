@@ -6,9 +6,9 @@ function App() {
   return (
     <div className="App">
      <LeftMenu/>
-     {/* <MainMenu/>
-     <RightMenu/>
-     <div className='background'>hhhhhhhh</div> */}
+      <MainMenu/>
+     {/* <RightMenu/>
+     <div className='background'>hhhhhhhh</div> */} 
     </div>
   );
 }

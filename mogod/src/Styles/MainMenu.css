@@ -1,0 +1,8 @@
+.mainContainer{
+    height: 100vh;
+    z-index: 1;
+    flex-grow: 1;
+    background:"#0B0C10";
+    width:"100%";
+     overflowY: 'scroll';  
+}
