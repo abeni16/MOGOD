@@ -26,9 +26,10 @@ const Image = styled.img`
 const Title = styled.h3`
   color: #000;
   font-size: 24px;
-  text-shadow: 6px 6px 12px rgb(0, 0, 0, 0.6);
+  /* text-shadow: 6px 6px 12px rgb(0, 0, 0, 0.6); */
   align-items: center;
   margin-bottom: 6px;
+  text-overflow: clip;
 `;
 const ArtistTitle = styled.h4`
   color: #555;
@@ -45,7 +46,10 @@ const PlayerDetails = (props) => {
       <ImageContainer>
         <Image src={props.audio.image}></Image>
       </ImageContainer>
-      <Title>{props.audio.title}</Title>
+
+      <marquee direction="right" scrollamount="3">
+        <Title>{props.audio.title}</Title>
+      </marquee>
       <ArtistTitle>{props.audio.artist}</ArtistTitle>
     </Container>
   );

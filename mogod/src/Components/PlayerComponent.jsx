@@ -76,15 +76,16 @@ const Slider = styled.input`
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: orange;
-  height: 4px;
+  height: 2px;
+
   width: 100%;
   cursor: pointer;
-  opacity: 1;
   margin: 8px auto;
   ::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 20px;
     height: 20px;
+    opacity: 0;
     background: orangered;
     border-radius: 50%;
     cursor: pointer;
@@ -93,6 +94,7 @@ const Slider = styled.input`
     -moz-appearance: none;
     width: 18px;
     height: 18px;
+    opacity: 0;
     background: orangered;
     border-radius: 50%;
     cursor: pointer;
@@ -104,6 +106,8 @@ const PlayerComponent = () => {
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [nextSongIndex, setNextSongIndex] = useState(currentSongIndex + 1);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [duration, setDuration] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
 
   //slider
   const [postion, setPostion] = useState(0);
@@ -112,6 +116,8 @@ const PlayerComponent = () => {
   const [progressBarWidth, setProgressBarWidth] = useState(0);
   const rangeRef = useRef();
   const onChange = (e) => {
+    const audio = audioEl.current;
+    audio.currentTime = (audio.duration / 100) * e.target.value;
     setPercentage(e.target.value);
   };
   useEffect(() => {
@@ -160,6 +166,16 @@ const PlayerComponent = () => {
     }
   };
   const audioEl = useRef(null);
+
+  const getCurrDuration = (e) => {
+    const percent = (
+      (e.currentTarget.currentTime / e.currentTarget.duration) *
+      100
+    ).toFixed(2);
+    const time = e.currentTarget.currentTime;
+    setPercentage(+percent);
+    setCurrentTime(time.toFixed(2));
+  };
   useEffect(() => {
     setNextSongIndex(() => {
       if (currentSongIndex + 1 > audios.length - 1) {
@@ -171,13 +187,23 @@ const PlayerComponent = () => {
   }, [currentSongIndex]);
   return (
     <Container>
-      <Audio src={audios[currentSongIndex].audio} ref={audioEl}></Audio>
+      <Audio
+        src={audios[currentSongIndex].audio}
+        ref={audioEl}
+        onLoadedData={(e) => {
+          // console.log(e.currentTarget.duration);
+          setDuration(e.currentTarget.duration.toFixed(2));
+        }}
+        onTimeUpdate={getCurrDuration}
+      ></Audio>
       <Heading>Playing Now</Heading>
       <PlayerDetails audio={audios[currentSongIndex]} />
       <PlayerControls
         isPlaying={isPlaying}
         setIsPlaying={setIsPlaying}
         SkipSong={skipSong}
+        duration={duration}
+        currentTime={currentTime}
       />
       <SliderContainer>
         <ProgersCover style={{ width: `${progressBarWidth}px` }}></ProgersCover>
@@ -194,7 +220,10 @@ const PlayerComponent = () => {
       </SliderContainer>
 
       <Text>
-        <strong>Next up:</strong> {audios[nextSongIndex].title}
+        <strong>Next up:</strong>
+        <marquee direction="right" scrollamount="3">
+          {audios[nextSongIndex].title}
+        </marquee>
       </Text>
     </Container>
   );
