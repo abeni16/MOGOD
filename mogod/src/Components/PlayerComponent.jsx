@@ -110,6 +110,7 @@ const PlayerComponent = () => {
   const [currentTime, setCurrentTime] = useState(0);
 
   //slider
+
   const [postion, setPostion] = useState(0);
   const [marginLeft, setMarginLeft] = useState(-20);
   const [percentage, setPercentage] = useState(0);
@@ -158,8 +159,8 @@ const PlayerComponent = () => {
         let temp = currentSongIndex;
         temp--;
 
-        if (temp > audios.length - 1) {
-          temp = 0;
+        if (temp < 0) {
+          temp = audios.length - 1;
         }
         return temp;
       });
