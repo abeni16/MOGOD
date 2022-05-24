@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import PlayerControls from "./PlayerControls";
 import PlayerDetails from "./PlayerDetails";
+import { AllAudio } from "../Data";
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
+
   align-items: center;
   text-align: center;
   flex-direction: column;
-  background-color: #dfdfdfdf;
+  background-color: #efefef;
   padding: 50px;
   border-radius: 16px;
   box-shadow: 6px 6px 12px #ffffff83;
@@ -27,16 +29,172 @@ const Text = styled.p`
   text-align: center;
   font-weight: 400;
 `;
+const SliderContainer = styled.div`
+  position: relative;
+  width: auto;
+  ::before {
+    content: "";
+    background-color: white;
+    width: 99%;
+    height: 4px;
+    display: block;
+    position: absolute;
+    border-radius: 10px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 1;
+  }
+`;
+const ProgersCover = styled.div`
+  background-color: aquamarine;
+  width: 99%;
+  height: 4px;
+  display: block;
+  position: absolute;
+  border-radius: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  user-select: none;
+  pointer-events: none;
+`;
+const Thumb = styled.div`
+  width: 20px;
+  height: 20px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.7);
+  z-index: 3;
+  background-color: #452;
+  position: absolute;
+  border-radius: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  user-select: none;
+`;
+const Slider = styled.input`
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: orange;
+  height: 4px;
+  width: 100%;
+  cursor: pointer;
+  opacity: 1;
+  margin: 8px auto;
+  ::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    background: orangered;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  ::-moz-range-thumb {
+    -moz-appearance: none;
+    width: 18px;
+    height: 18px;
+    background: orangered;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+`;
 
 const PlayerComponent = () => {
+  const [audios] = useState(AllAudio);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [nextSongIndex, setNextSongIndex] = useState(currentSongIndex + 1);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  //slider
+  const [postion, setPostion] = useState(0);
+  const [marginLeft, setMarginLeft] = useState(-20);
+  const [percentage, setPercentage] = useState(0);
+  const [progressBarWidth, setProgressBarWidth] = useState(0);
+  const rangeRef = useRef();
+  const onChange = (e) => {
+    setPercentage(e.target.value);
+  };
+  useEffect(() => {
+    const rangeWidth = rangeRef.current.getBoundingClientRect().width;
+
+    const thumbWidth = 20;
+    const centerThumb = (thumbWidth / 100) * percentage * -1;
+    const centerProgeres =
+      thumbWidth +
+      (rangeWidth / 100) * percentage -
+      (thumbWidth / 100) * percentage;
+    setMarginLeft(centerThumb);
+    setPostion(percentage);
+    setProgressBarWidth(centerProgeres);
+  }, [percentage]);
+
+  useEffect(() => {
+    if (isPlaying) {
+      audioEl.current.play();
+    } else {
+      audioEl.current.pause();
+    }
+  });
+
+  const skipSong = (forwards = true) => {
+    if (forwards) {
+      setCurrentSongIndex(() => {
+        let temp = currentSongIndex;
+        temp++;
+
+        if (temp > audios.length - 1) {
+          temp = 0;
+        }
+        return temp;
+      });
+    } else {
+      setCurrentSongIndex(() => {
+        let temp = currentSongIndex;
+        temp--;
+
+        if (temp > audios.length - 1) {
+          temp = 0;
+        }
+        return temp;
+      });
+    }
+  };
+  const audioEl = useRef(null);
+  useEffect(() => {
+    setNextSongIndex(() => {
+      if (currentSongIndex + 1 > audios.length - 1) {
+        return 0;
+      } else {
+        return currentSongIndex + 1;
+      }
+    });
+  }, [currentSongIndex]);
   return (
     <Container>
-      <Audio></Audio>
+      <Audio src={audios[currentSongIndex].audio} ref={audioEl}></Audio>
       <Heading>Playing Now</Heading>
-      <PlayerDetails />
-      <PlayerControls />
+      <PlayerDetails audio={audios[currentSongIndex]} />
+      <PlayerControls
+        isPlaying={isPlaying}
+        setIsPlaying={setIsPlaying}
+        SkipSong={skipSong}
+      />
+      <SliderContainer>
+        <ProgersCover style={{ width: `${progressBarWidth}px` }}></ProgersCover>
+        <Thumb
+          style={{ left: `${postion}%`, marginLeft: `${marginLeft + 10}px` }}
+        ></Thumb>
+        <Slider
+          ref={rangeRef}
+          type="range"
+          step="0.01"
+          onChange={onChange}
+          value={postion}
+        />
+      </SliderContainer>
+
       <Text>
-        <strong>Next up:</strong> Tikur sew
+        <strong>Next up:</strong> {audios[nextSongIndex].title}
       </Text>
     </Container>
   );

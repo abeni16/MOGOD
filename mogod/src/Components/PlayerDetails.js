@@ -3,19 +3,23 @@ import styled from "styled-components";
 import imageurl from "../Image/photo_2022-05-21_21-47-02.jpg";
 
 const Container = styled.div`
-  position: relative;
-  margin: 12px auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  margin: 4px auto;
+  align-items: center;
 `;
 const ImageContainer = styled.div`
   display: block;
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   border-radius: 50%;
   box-shadow: inset 6px 6px 12px rgb(0, 0, 0, 0.6);
 `;
 const Image = styled.img`
-  width: 120px;
-  height: 120px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
   border-radius: 50%;
 `;
@@ -34,14 +38,15 @@ const ArtistTitle = styled.h4`
   margin-bottom: 6px;
 `;
 
-const PlayerDetails = () => {
+const PlayerDetails = (props) => {
+  console.log(imageurl);
   return (
     <Container>
       <ImageContainer>
-        <Image src={imageurl}></Image>
+        <Image src={props.audio.image}></Image>
       </ImageContainer>
-      <Title>Lambadina</Title>
-      <ArtistTitle>Teddy Afro</ArtistTitle>
+      <Title>{props.audio.title}</Title>
+      <ArtistTitle>{props.audio.artist}</ArtistTitle>
     </Container>
   );
 };

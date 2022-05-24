@@ -20,7 +20,6 @@ const Row = styled.div`
   padding: 6px;
   transition: all 0.3s ease;
   :hover {
-    transform: scaleY(1.1);
     background-color: #ddd;
   }
 `;

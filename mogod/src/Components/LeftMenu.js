@@ -25,7 +25,6 @@ const LeftMenu = () => {
       {console.log(MenuList)}
       <Menu title={"Menu"} MenuObject={MenuList} />
       <PlayerComponent />
-      <TrackList />
     </div>
   );
 };
