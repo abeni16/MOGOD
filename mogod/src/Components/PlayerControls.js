@@ -63,7 +63,7 @@ const MainButton = styled.button`
   }
 `;
 const Text = styled.p`
-  color: #444;
+  color: #fff;
   font-size: 10px;
   text-align: center;
   font-weight: 400;

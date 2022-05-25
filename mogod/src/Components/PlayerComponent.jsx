@@ -7,15 +7,15 @@ import { AllAudio } from "../Data";
 const Container = styled.div`
   display: flex;
   justify-content: center;
-
   align-items: center;
   text-align: center;
   flex-direction: column;
-  background-color: #efefef;
-  padding: 50px;
+  padding: 25px;
   border-radius: 16px;
   box-shadow: 6px 6px 12px #ffffff83;
+  background-color: #ffa6008b;
 `;
+
 const Audio = styled.audio``;
 const Heading = styled.h4`
   color: #111;
@@ -24,7 +24,7 @@ const Heading = styled.h4`
   text-align: center;
 `;
 const Text = styled.p`
-  color: #444;
+  color: #fff;
   font-size: 12px;
   text-align: center;
   font-weight: 400;
@@ -48,7 +48,7 @@ const SliderContainer = styled.div`
   }
 `;
 const ProgersCover = styled.div`
-  background-color: aquamarine;
+  background-color: orange;
   width: 99%;
   height: 4px;
   display: block;
@@ -77,7 +77,7 @@ const Slider = styled.input`
   -moz-appearance: none;
   background-color: orange;
   height: 2px;
-
+  opacity: 0;
   width: 100%;
   cursor: pointer;
   margin: 8px auto;
@@ -187,12 +187,11 @@ const PlayerComponent = () => {
     });
   }, [currentSongIndex]);
   return (
-    <Container>
+    <Container image={audios[currentSongIndex].image}>
       <Audio
         src={audios[currentSongIndex].audio}
         ref={audioEl}
         onLoadedData={(e) => {
-          // console.log(e.currentTarget.duration);
           setDuration(e.currentTarget.duration.toFixed(2));
         }}
         onTimeUpdate={getCurrDuration}

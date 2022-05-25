@@ -32,7 +32,7 @@ const Title = styled.h3`
   text-overflow: clip;
 `;
 const ArtistTitle = styled.h4`
-  color: #555;
+  color: #fff;
   font-size: 12px;
   text-shadow: 6px 6px 12px rgb(0, 0, 0, 0.6);
   align-items: center;
